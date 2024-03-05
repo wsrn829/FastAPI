@@ -5,7 +5,7 @@ services:
   api:
     build:
       context: ./api
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
     environment:
       DATABASE_URL: postgresql://example_user:secret@db/example
       WAIT_HOSTS: db:5432
