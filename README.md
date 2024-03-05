@@ -8,7 +8,7 @@
 - queries(FastAPI endpoints): write sql to interact with databases
 (We separate folders instead of putting all endpoints inside main.py just for good code organization)
 
-putting pydantic models in queries is an easier way.
+Putting pydantic models in queries is an easier way.
 
 ### pydantic models vs Djangdo models
 
