@@ -1,9 +1,17 @@
-from fastapi import APIRouter
-from queries.vacations import VacationIn
+from fastapi import APIRouter, Depends
+from typing import Union
+from queries.vacations import (
+    VacationIn,
+    VacationRepository,
+    VacationOut,
+    Error,
+)
 
 router = APIRouter()
 
-@router.post("/vacations/")
-def create_vacation(vacation: VacationIn):
-    print('vacation:', vacation)
-    return vacation
+@router.post("/vacations", response_model=Union [VacationOut, Error])
+def create_vacation(
+    vacation: VacationIn,
+    repo: VacationRepository = Depends()
+    ):
+    return repo.create(vacation)
