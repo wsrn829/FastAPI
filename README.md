@@ -15,7 +15,7 @@
 - FastAPI BaseModel has nothing to do with databases, it is for our Endpoints.
 
 
-### Pydantic Models vs Djangdo Models
+### Pydantic Models vs Django Models
 
 Similarities:
 
@@ -45,16 +45,3 @@ Django Models:
 - Django models use fields (like CharField, IntegerField, etc.) to define the type of data each attribute can hold.
 - Django models can have relationships with other models (like foreign keys for one-to-many relationships, many-to-many fields, etc.).
 - Django models come with a built-in admin interface for CRUD operations.
-
-Similarities:
-
-- Both Pydantic and Django models use classes to define data structures.
-- Both can use type information to perform data validation.
-- Both can be used to define and validate complex data structures.
-
-Differences:
-
-- Django models are tied to a database and provide ORM capabilities, while Pydantic models are not tied to a database.
-- Django models are used with Django, while Pydantic models can be used with any Python code, but are often used with FastAPI.
-- Pydantic uses Python type annotations for validation, while Django uses specific field types.
-- Django models come with a built-in admin interface, while Pydantic does not.
