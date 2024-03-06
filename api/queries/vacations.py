@@ -34,17 +34,28 @@ class VacationRepository:
                         ORDER_BY from_date;
                         """
                     )
-                    result = []
-                    for record in db:
-                        vacation = VacationOut(
+                    # result = []
+                    # for record in db:
+                    #     vacation = VacationOut(
+                    #          id=record[0],
+                    #                 name=record[1],
+                    #                 from_date=record[2],
+                    #                 how_long=record[3],
+                    #                 thoughts=record[4]
+                    #     )
+                    #     result.append(vacation)
+                    #     return result
+                    return [
+                        VacationOut(
                             id=record[0],
                             name=record[1],
                             from_date=record[2],
                             how_long=record[3],
                             thoughts=record[4]
                         )
-                        result.append(vacation)
-                    return result
+                        for record in db
+                    ]
+        except Exception:
             return {"message": "Could not get all vacations"}
 
 
