@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, List, Union
 from datetime import date
 from queries.pool import pool
 
@@ -20,6 +20,34 @@ class VacationOut(VacationIn):
     thoughts: Optional[str]
 
 class VacationRepository:
+    def get_all(self) -> Union[Error, List[VacationOut]]:
+        try:
+            # connect the database
+            with pool.connection() as conn:
+                # get a cursor (something to run SQL with)
+                with conn.cursor() as db:
+                    # Run our SELECT statement
+                    result = db.execute(
+                        """
+                        SELECT id, name, from_date, how_long, thoughts
+                        FROM vacations
+                        ORDER_BY from_date;
+                        """
+                    )
+                    result = []
+                    for record in db:
+                        vacation = VacationOut(
+                            id=record[0],
+                            name=record[1],
+                            from_date=record[2],
+                            how_long=record[3],
+                            thoughts=record[4]
+                        )
+                        result.append(vacation)
+                    return result
+            return {"message": "Could not get all vacations"}
+
+
     def create(self, vacation: VacationIn) -> VacationOut:
         # connect the database
         with pool.connection() as conn:

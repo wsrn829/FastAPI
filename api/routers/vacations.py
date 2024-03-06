@@ -1,5 +1,5 @@
-from fastapi import APIRouter, Depends
-from typing import Union
+from fastapi import APIRouter, Depends, Response
+from typing import Union, List
 from queries.vacations import (
     VacationIn,
     VacationRepository,
@@ -9,9 +9,16 @@ from queries.vacations import (
 
 router = APIRouter()
 
-@router.post("/vacations", response_model=Union [VacationOut, Error])
+@router.post("/vacations", response_model=Union[VacationOut, Error])
 def create_vacation(
     vacation: VacationIn,
+    response: Response,
     repo: VacationRepository = Depends()
     ):
     return repo.create(vacation)
+
+@router.get("/vacations", response_model=List[VacationOut])
+def get_all(
+    repo: VacationRepository = Depends(),
+):
+    return repo.get_all()
