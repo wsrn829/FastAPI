@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, Response
-from typing import Union, List
+from typing import Union, List, Optional
 from queries.vacations import (
     VacationIn,
     VacationRepository,
@@ -31,3 +31,24 @@ def update_vacation(
     repo: VacationRepository = Depends()
     ) -> Union[Error, VacationOut]:
     return repo.update(vacation_id, vacation)
+
+
+@router.delete("/vacations/{vacation_id}", response_model=bool)
+def delete_vacation(
+    vacation_id: int,
+    response: Response,
+    repo: VacationRepository = Depends()
+    ) -> bool:
+    return repo.delete(vacation_id)
+
+
+@router.get("/vacations/{vacation_id}", response_model=Optional[VacationOut])
+def get_one_vacation(
+    vacation_id: int,
+    response: Response,
+    repo: VacationRepository = Depends()
+    ) -> VacationOut:
+    vacation = repo.get_one(vacation_id)
+    if vacation is None:
+        response.status_code = 404
+    return vacation
