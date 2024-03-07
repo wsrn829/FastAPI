@@ -22,3 +22,12 @@ def get_all(
     repo: VacationRepository = Depends(),
 ):
     return repo.get_all()
+
+@router.put("/vacations/{vacation_ id}", response_model=Union[VacationOut, Error])
+def update_vacation(
+    vacation_id: int,
+    vacation: VacationIn,
+    response: Response,
+    repo: VacationRepository = Depends()
+    ) -> Union[Error, VacationOut]:
+    return repo.update(vacation_id, vacation)

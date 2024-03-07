@@ -20,6 +20,38 @@ class VacationOut(VacationIn):
     thoughts: Optional[str]
 
 class VacationRepository:
+    def update(self, vacation_id: int, vacation: VacationIn) -> Union[VacationOut, Error]:
+        try:
+            # connect the database
+            with pool.connection() as conn:
+                # get a cursor (something to run SQL with)
+                with conn.cursor() as db:
+                    # Run our UPDATE statement
+                    db.execute(
+                        """
+                        UPDATE vacations
+                        SET
+                            name = %s,
+                            from_date = %s,
+                            how_long = %s,
+                            thoughts = %s
+                        WHERE id = %s;
+                        """,
+                        [
+                            vacation.name,
+                            vacation.from_date,
+                            vacation.how_long,
+                            vacation.thoughts,
+                            vacation_id
+                        ]
+                    )
+                    # Return new data
+                    # old_data = vacation.dict()
+                    # return VacationOut(id=vacation_id, **old_data)
+                    return self.vacation_in_to_out(vacation_id, vacation)
+        except Exception:
+            return {"message": "Could not update vacation"}
+
     def get_all(self) -> Union[Error, List[VacationOut]]:
         try:
             # connect the database
@@ -82,5 +114,9 @@ class VacationRepository:
                 )
                 id = result.fetchone()[0]
                 # Return new data
-                old_data = vacation.dict()
-                return VacationOut(id=id, **old_data)
+                return self.vacation_in_to_out(id, vacation)
+
+
+    def vacation_in_to_out(self, id: int, vacation: VacationIn) -> VacationOut:
+        old_data = vacation.dict()
+        return VacationOut(id=id, **old_data)
